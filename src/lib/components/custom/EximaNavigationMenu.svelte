@@ -5,44 +5,39 @@
 	import SunIcon from '@lucide/svelte/icons/sun';
 	import MoonIcon from '@lucide/svelte/icons/moon';
 	import { toggleMode } from 'mode-watcher';
+	import FileTextIcon from '@lucide/svelte/icons/file-text';
+	import InfoIcon from '@lucide/svelte/icons/info';
+	import MailIcon from '@lucide/svelte/icons/mail';
+	import BookOpenIcon from '@lucide/svelte/icons/book-open';
+	import HandshakeIcon from '@lucide/svelte/icons/handshake';
 
-	// State for mobile sidebar visibility
 	let isSidebarOpen = $state(false);
 
-	// Toggle sidebar open/closed
 	function toggleSidebar() {
 		isSidebarOpen = !isSidebarOpen;
 	}
 
-	// Close sidebar (used when clicking overlay or links)
 	function closeSidebar() {
 		isSidebarOpen = false;
 	}
 
-	// Shared link style classes
 	const mobileLinkClasses = 'w-full justify-start';
 
-	// Navigation items configuration
 	const navItems = [
-		{ href: '/docs', label: 'Docs' },
-		{ href: '/about', label: 'About' },
-		{ href: '/contact', label: 'Contact' }
+		{ href: '/solutions', label: 'Çözümler', icon: FileTextIcon },
+		{ href: '/about', label: 'Hakkında', icon: InfoIcon },
+		{ href: '/contact', label: 'İletişim', icon: MailIcon },
+		{ href: '/blog', label: 'Blog', icon: BookOpenIcon }
 	];
 </script>
 
 <!-- Hamburger Menu Button (Mobile Only) -->
 <button
-	class="md:hidden fixed top-4 right-4 z-50 p-2 bg-background border rounded-md shadow-sm hover:bg-accent"
+	class="fixed top-4 right-4 z-50 rounded-md border bg-background p-2 shadow-sm hover:bg-accent md:hidden"
 	onclick={toggleSidebar}
 	aria-label="Toggle navigation menu"
 >
-	<svg
-		class="w-6 h-6"
-		fill="none"
-		stroke="currentColor"
-		viewBox="0 0 24 24"
-		aria-hidden="true"
-	>
+	<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
 		{#if isSidebarOpen}
 			<!-- Close icon (X) -->
 			<path
@@ -65,7 +60,9 @@
 
 <!-- Backdrop Overlay (Mobile Only) -->
 <button
-	class="md:hidden fixed inset-0 bg-black z-40 transition-opacity duration-300 ease-in-out {isSidebarOpen ? 'opacity-50 pointer-events-auto' : 'opacity-0 pointer-events-none'}"
+	class="fixed inset-0 z-40 bg-black transition-opacity duration-300 ease-in-out md:hidden {isSidebarOpen
+		? 'pointer-events-auto opacity-50'
+		: 'pointer-events-none opacity-0'}"
 	onclick={closeSidebar}
 	aria-label="Close navigation menu"
 ></button>
@@ -73,31 +70,32 @@
 <!-- Navigation Sidebar/Menu -->
 <NavigationMenu.Root
 	class="
-		fixed md:relative
-		top-0 right-0
-		h-full md:h-auto
-		w-64 md:w-auto
-		bg-background md:bg-transparent
-		border-l md:border-l-0
-		p-4 md:p-2
-		transition-transform duration-300 ease-in-out
-		z-40
-		{isSidebarOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}
-	"
+        fixed top-0
+        right-0 z-40
+        h-full w-64
+        border-l bg-background
+        p-4 transition-transform
+        duration-300 ease-in-out
+        md:relative md:h-auto
+        md:w-auto md:border-l-0 md:bg-transparent
+        md:p-2
+        {isSidebarOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}
+    "
 	viewport={false}
 >
-	<div class="flex flex-col md:flex-row md:items-center md:justify-between w-full gap-4">
+	<div class="flex w-full flex-col gap-4 md:flex-row md:items-center md:justify-between">
 		<!-- Navigation Links List -->
-		<NavigationMenu.List class="flex-col md:flex-row items-start md:items-center gap-2 md:gap-1">
+		<NavigationMenu.List class="flex-col items-start gap-2 md:flex-row md:items-center md:gap-1">
 			{#each navItems as item}
 				<NavigationMenu.Item>
 					<NavigationMenu.Link>
 						{#snippet child()}
 							<a
 								href={item.href}
-								class="{navigationMenuTriggerStyle()} {mobileLinkClasses}"
+								class="{navigationMenuTriggerStyle()} {mobileLinkClasses} flex items-center gap-2"
 								onclick={closeSidebar}
 							>
+								<item.icon class="h-4 w-4" />
 								{item.label}
 							</a>
 						{/snippet}
@@ -107,20 +105,23 @@
 		</NavigationMenu.List>
 
 		<!-- Actions Section -->
-		<div class="flex flex-col md:flex-row items-stretch md:items-center gap-2">
+		<div class="flex flex-col items-stretch gap-2 md:flex-row md:items-center">
 			<!-- Call-to-Action Button -->
-			<Button class="w-full md:w-auto">Beraber çözelim</Button>
+			<Button class="flex w-full items-center gap-2 md:w-auto" href="/quotation-request">
+				<HandshakeIcon class="h-4 w-4" />
+				Beraber çözelim
+			</Button>
 
-			<!-- Theme Toggle Button -->
-			<Button onclick={toggleMode} variant="outline" size="icon">
+			<!-- Theme Toggle Button (Mobile Only) -->
+			<Button onclick={toggleMode} variant="outline" size="icon" class="md:hidden">
 				<SunIcon
-					class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 !transition-all dark:-rotate-90 dark:scale-0"
+					class="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 !transition-all dark:scale-0 dark:-rotate-90"
 				/>
 				<MoonIcon
-					class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 !transition-all dark:rotate-0 dark:scale-100"
+					class="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 !transition-all dark:scale-100 dark:rotate-0"
 				/>
 				<span class="sr-only">Toggle theme</span>
 			</Button>
 		</div>
-	</div>
-</NavigationMenu.Root>
+	</div></NavigationMenu.Root
+>
