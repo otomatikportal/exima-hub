@@ -2,14 +2,9 @@
 	import * as NavigationMenu from '$lib/components/ui/navigation-menu/index.js';
 	import { navigationMenuTriggerStyle } from '$lib/components/ui/navigation-menu/navigation-menu-trigger.svelte';
 	import Button from '../ui/button/button.svelte';
-	import SunIcon from '@lucide/svelte/icons/sun';
-	import MoonIcon from '@lucide/svelte/icons/moon';
 	import { toggleMode } from 'mode-watcher';
-	import FileTextIcon from '@lucide/svelte/icons/file-text';
-	import InfoIcon from '@lucide/svelte/icons/info';
-	import MailIcon from '@lucide/svelte/icons/mail';
-	import BookOpenIcon from '@lucide/svelte/icons/book-open';
-	import HandshakeIcon from '@lucide/svelte/icons/handshake';
+
+	import { SunIcon, MoonIcon, FileTextIcon, InfoIcon, MailIcon, BookOpenIcon, HandshakeIcon } from 'lucide-svelte';
 
 	let isSidebarOpen = $state(false);
 
